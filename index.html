@@ -165,15 +165,45 @@
       }
     }
 
-    /* Hero Logo Animation - Interactive Mouse Glow */
+    /* Hero Logo Animation - Volumetric Spotlight Effect */
+    .logo-container {
+      position: relative;
+      display: inline-block;
+      --h: 0;
+      --v: 0;
+    }
+
     .logo-hero {
+      position: relative;
+      z-index: 10;
       opacity: 0;
-      transition: filter 0.15s ease-out, transform 0.15s ease-out;
+      filter: brightness(0) invert(1);
+      transition: filter 0.15s ease-out;
     }
 
     .logo-hero.logo-visible {
       opacity: 1;
       animation: logo-entrance 2.5s ease-out forwards;
+    }
+
+    .logo-shadow-copy {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      transform: translate(calc(var(--index) * var(--h) * 0.8px),
+          calc(var(--index) * var(--v) * 0.8px)) scale(calc(1 + var(--index) * 0.002));
+      filter: brightness(0) invert(1) blur(calc(var(--index) * 0.08px));
+      opacity: var(--opacity);
+      pointer-events: none;
+      z-index: calc(10 - var(--index));
+      will-change: transform, opacity;
+    }
+
+    /* Primary color tint for shadow copies */
+    .logo-shadow-copy.accent-tint {
+      filter: brightness(0) invert(1) blur(calc(var(--index) * 0.1px)) drop-shadow(0 0 calc(var(--index) * 1.5px) rgba(67, 67, 255, 0.3));
     }
 
     @keyframes logo-entrance {
@@ -375,10 +405,11 @@
 
       <!-- Content -->
       <div class="relative z-10 text-center">
-        <!-- Logo with Interactive Glow -->
-        <img id="hero-logo" src="logo.svg" alt="Logo"
-          class="logo-hero logo-hidden mx-auto w-[150px] md:w-[250px] lg:w-[350px]"
-          style="filter: brightness(0) invert(1) drop-shadow(0 0 40px rgba(67, 67, 255, 0.8)) drop-shadow(0 0 80px rgba(67, 67, 255, 0.5)) drop-shadow(0 0 120px rgba(67, 67, 255, 0.3));">
+        <!-- Logo Container for Volumetric Spotlight Effect -->
+        <div id="hero-logo-container" class="logo-container mx-auto w-[150px] md:w-[250px] lg:w-[350px]">
+          <!-- Shadow copies will be inserted here by JS -->
+          <img id="hero-logo" src="logo.svg" alt="Logo" class="logo-hero logo-hidden w-full h-auto">
+        </div>
 
         <!-- Hero Subtitle with Typewriter Effect -->
         <div id="hero-subtitle"
@@ -1229,29 +1260,46 @@
       type();
     }
 
-    // Interactive Logo Glow Effect (inspired by mousetext.js)
+    // Volumetric Spotlight Effect (inspired by mousetext.js)
     function initLogoGlow(logo) {
+      const container = document.getElementById('hero-logo-container');
       const heroSection = logo.closest('header');
+      if (!container || !heroSection) return;
+
+      // Configuration
+      const COPIES = 30;  // Reduced for more subtle effect
+      const SCALE_FACTOR = 0.002;  // Smaller scale for subtlety
+
       let animationFrame;
-      let direction = { x: 0, y: 0 };
+      let direction = { h: 1, v: 1 };  // Default: centered glow
 
-      // Base glow settings
-      const glowColor = { r: 67, g: 67, b: 255 }; // Accent blue
-      const baseBlur = 40;
-      const maxOffset = 20;
+      // Create shadow copies
+      const shadowCopies = [];
+      for (let i = 1; i <= COPIES; i++) {
+        const copy = document.createElement('img');
+        copy.src = logo.src;
+        copy.className = 'logo-shadow-copy';
+        copy.alt = '';
+        copy.draggable = false;
 
-      function updateGlow() {
-        const offsetX = direction.x * maxOffset;
-        const offsetY = direction.y * maxOffset;
+        // Calculate opacity: more subtle fade
+        const opacity = Math.max(0.01, 0.6 / i);
 
-        // Create multi-layered glow that follows mouse direction
-        const filter = `
-          brightness(0) invert(1)
-          drop-shadow(${offsetX * 0.5}px ${offsetY * 0.5}px ${baseBlur}px rgba(${glowColor.r}, ${glowColor.g}, ${glowColor.b}, 0.9))
-          drop-shadow(${offsetX}px ${offsetY}px ${baseBlur * 2}px rgba(${glowColor.r}, ${glowColor.g}, ${glowColor.b}, 0.6))
-          drop-shadow(${offsetX * 1.5}px ${offsetY * 1.5}px ${baseBlur * 3}px rgba(${glowColor.r}, ${glowColor.g}, ${glowColor.b}, 0.3))
-        `;
-        logo.style.filter = filter.trim().replace(/\s+/g, ' ');
+        copy.style.setProperty('--index', i);
+        copy.style.setProperty('--opacity', opacity);
+
+        // Add accent tint for outer copies
+        if (i > 15) {
+          copy.classList.add('accent-tint');
+        }
+
+        container.insertBefore(copy, logo);
+        shadowCopies.push(copy);
+      }
+
+      function updateCopies() {
+        container.style.setProperty('--h', direction.h);
+        container.style.setProperty('--v', direction.v);
       }
 
       function handleMouseMove(e) {
@@ -1261,34 +1309,35 @@
         const centerX = rect.left + rect.width / 2;
         const centerY = rect.top + rect.height / 2;
 
-        // Calculate direction from center (-1 to 1)
-        let x = (e.clientX - centerX) / (rect.width / 2);
-        let y = (e.clientY - centerY) / (rect.height / 2);
+        // Calculate direction from center
+        // Inverted: glow goes opposite to mouse (like light from behind)
+        let h = (centerX - e.clientX) / (rect.width / 2);
+        let v = (centerY - e.clientY) / (rect.height / 2);
 
-        // Clamp values
-        x = Math.max(-1, Math.min(1, x));
-        y = Math.max(-1, Math.min(1, y));
+        // Clamp to [-1, 1]
+        h = Math.max(-1, Math.min(1, h));
+        v = Math.max(-1, Math.min(1, v));
 
         animationFrame = requestAnimationFrame(() => {
-          direction = { x, y };
-          updateGlow();
+          direction = { h, v };
+          updateCopies();
         });
       }
 
       function handleMouseLeave() {
-        // Animate back to center
+        // Animate back to default centered position
         function animateBack() {
-          const speed = 0.1;
-          direction.x += (0 - direction.x) * speed;
-          direction.y += (0 - direction.y) * speed;
+          const speed = 0.12;
+          direction.h += (1 - direction.h) * speed;
+          direction.v += (1 - direction.v) * speed;
 
-          if (Math.abs(direction.x) < 0.01 && Math.abs(direction.y) < 0.01) {
-            direction = { x: 0, y: 0 };
-            updateGlow();
+          if (Math.abs(direction.h - 1) < 0.01 && Math.abs(direction.v - 1) < 0.01) {
+            direction = { h: 1, v: 1 };
+            updateCopies();
             return;
           }
 
-          updateGlow();
+          updateCopies();
           animationFrame = requestAnimationFrame(animateBack);
         }
         animateBack();
@@ -1298,8 +1347,8 @@
       heroSection.addEventListener('mousemove', handleMouseMove);
       heroSection.addEventListener('mouseleave', handleMouseLeave);
 
-      // Initial glow
-      updateGlow();
+      // Initial state
+      updateCopies();
     }
 
     // Check if we should skip intro based on cache
