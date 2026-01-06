@@ -126,8 +126,8 @@
     .logo-hero {
       opacity: 0;
       animation: logo-entrance 2.5s ease-out 1s forwards,
-        logo-glow 2.5s ease-out 5s,
-        logo-slow-zoom 20s ease-in-out 7.5s infinite alternate;
+        logo-glow 2.5s ease-out 1s,
+        logo-slow-zoom 20s ease-in-out 3.5s infinite alternate;
       filter: brightness(0) invert(1) drop-shadow(0 0 0px rgba(255, 255, 255, 0));
     }
 
@@ -165,6 +165,15 @@
       100% {
         transform: scale(1.1);
       }
+    }
+
+    /* Logo visibility control */
+    .logo-hidden {
+      display: none !important;
+    }
+
+    .logo-visible {
+      display: block;
     }
 
     /* Scroll Indicator */
@@ -346,7 +355,8 @@
       <!-- Content -->
       <div class="relative z-10 text-center">
         <!-- Logo -->
-        <img id="hero-logo" src="logo.svg" alt="Logo" class="logo-hero mx-auto w-[150px] md:w-[250px] lg:w-[350px]"
+        <img id="hero-logo" src="logo.svg" alt="Logo"
+          class="logo-hero logo-hidden mx-auto w-[150px] md:w-[250px] lg:w-[350px]"
           style="filter: brightness(0) invert(1);">
       </div>
 
@@ -1148,6 +1158,13 @@
         setTimeout(() => {
           heroVideo.classList.add('fade-in');
         }, 100); // Small delay to ensure smooth start
+      }
+
+      // Show and animate hero logo
+      const heroLogo = document.getElementById('hero-logo');
+      if (heroLogo) {
+        heroLogo.classList.remove('logo-hidden');
+        heroLogo.classList.add('logo-visible');
       }
 
       // Fade in AI text
