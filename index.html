@@ -125,7 +125,9 @@
     /* Hero Logo Animation */
     .logo-hero {
       opacity: 0;
-      animation: logo-entrance 2.5s ease-out 1s forwards, logo-glow 2.5s ease-out 1s;
+      animation: logo-entrance 2.5s ease-out 1s forwards,
+        logo-glow 2.5s ease-out 1s,
+        logo-slow-zoom 20s ease-in-out 3.5s infinite alternate;
       filter: brightness(0) invert(1) drop-shadow(0 0 0px rgba(255, 255, 255, 0));
     }
 
@@ -152,6 +154,16 @@
 
       100% {
         filter: brightness(0) invert(1) drop-shadow(0 4px 12px rgba(255, 255, 255, 0.3));
+      }
+    }
+
+    @keyframes logo-slow-zoom {
+      0% {
+        transform: scale(1);
+      }
+
+      100% {
+        transform: scale(1.1);
       }
     }
 
