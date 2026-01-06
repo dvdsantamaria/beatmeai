@@ -255,9 +255,21 @@
     #main-content {
       opacity: 0;
       transition: opacity 1s ease;
+      background-color: #0a0a0a;
+      /* Ensure black background */
     }
 
     #main-content.visible {
+      opacity: 1;
+    }
+
+    /* Hero video fade-in */
+    #hero-video {
+      opacity: 0;
+      transition: opacity 1.2s ease;
+    }
+
+    #hero-video.fade-in {
       opacity: 1;
     }
   </style>
@@ -1081,8 +1093,17 @@
     const fadeOverlay = document.getElementById('fade-overlay');
     const mainContent = document.getElementById('main-content');
 
-    // Function to trigger AI text animation
+    // Function to trigger AI text animation and hero video fade-in
     function triggerAiAnimation() {
+      // Fade in hero video
+      const heroVideo = document.getElementById('hero-video');
+      if (heroVideo) {
+        setTimeout(() => {
+          heroVideo.classList.add('fade-in');
+        }, 100); // Small delay to ensure smooth start
+      }
+
+      // Fade in AI text
       setTimeout(() => {
         const heroAiText = document.getElementById('hero-ai-text');
         if (heroAiText) {
