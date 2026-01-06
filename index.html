@@ -31,6 +31,7 @@
           },
           fontFamily: {
             'sans': ['Inter', 'Open Sans', 'system-ui', 'sans-serif'],
+            'title': ['CarbonPlus Bold', 'sans-serif'],
             'display': ['Comfortaa', 'cursive'],
             'heading': ['Lobster', 'cursive'],
           },
@@ -43,23 +44,46 @@
     @font-face {
       font-family: "CarbonPlus Bold";
       src: url("CarbonPlus.woff2") format("woff2");
-      font-weight: normal;
+      font-weight: 100 900;
       font-style: normal;
       font-display: swap;
     }
 
+    /* Primary Typography: Title-First approach */
     * {
-      font-family: 'Inter', sans-serif;
+      font-family: 'CarbonPlus Bold', sans-serif;
     }
 
+    /* Paragraphs and secondary text elements use Inter */
+    p,
+    .text-lg,
+    .text-sm,
+    .text-xs,
+    .inter-text,
+    button,
+    .btn-primary,
+    .btn-secondary {
+      font-family: 'Inter', sans-serif !important;
+    }
+
+    /* Force Title font on all heading levels and their children (spans, etc) */
     h1,
     h2,
     h3,
     h4,
     h5,
     h6,
+    h1 *,
+    h2 *,
+    h3 *,
+    h4 *,
+    h5 *,
+    h6 *,
     .font-display,
-    .font-black {
+    .font-display *,
+    .font-black,
+    .font-black *,
+    .animate-marquee * {
       font-family: 'CarbonPlus Bold', sans-serif !important;
     }
 
@@ -377,6 +401,10 @@
         <img id="hero-logo" src="logo.svg" alt="Logo"
           class="logo-hero logo-hidden mx-auto w-[150px] md:w-[250px] lg:w-[350px]"
           style="filter: brightness(0) invert(1);">
+
+        <!-- Hero Subtitle with Typewriter Effect -->
+        <div id="hero-subtitle"
+          class="mt-6 text-white/50 text-[10px] md:text-sm font-bold uppercase tracking-[0.4em] min-h-[1.5em]"></div>
       </div>
 
       <!-- Scroll Indicator
@@ -1184,6 +1212,11 @@
       if (heroLogo) {
         heroLogo.classList.remove('logo-hidden');
         heroLogo.classList.add('logo-visible');
+
+        // Start typewriter effect after a small delay
+        setTimeout(() => {
+          typeWriter("hero-subtitle", "Content Architecture", 100);
+        }, 1500);
       }
 
       // Fade in AI text
@@ -1193,6 +1226,23 @@
           heroAiText.classList.add('loaded');
         }
       }, 500); // Small delay after content is visible
+    }
+
+    // Typewriter effect function
+    function typeWriter(elementId, text, speed) {
+      let i = 0;
+      const element = document.getElementById(elementId);
+      if (!element) return;
+      element.innerHTML = "";
+
+      function type() {
+        if (i < text.length) {
+          element.innerHTML += text.charAt(i);
+          i++;
+          setTimeout(type, speed);
+        }
+      }
+      type();
     }
 
     // Check if we should skip intro based on cache
