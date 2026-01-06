@@ -368,7 +368,7 @@
           style="filter: brightness(0) invert(1);">
       </div>
 
-      <!-- Scroll Indicator -->
+      Scroll Indicator
       <div class="absolute bottom-10 left-1/2 -translate-x-1/2 z-10">
         <div class="w-6 h-10 border-2 border-white/30 rounded-full flex items-start justify-center p-1.5">
           <div class="w-1.5 h-3 bg-white/60 rounded-full animate-scroll-dot"></div>
@@ -1182,18 +1182,6 @@
           heroAiText.classList.add('loaded');
         }
       }, 500); // Small delay after content is visible
-    }
-
-    // Show logo as soon as hero video is loaded (even during intro)
-    const heroVideo = document.getElementById('hero-video');
-    if (heroVideo) {
-      heroVideo.addEventListener('canplay', function () {
-        const heroLogo = document.getElementById('hero-logo');
-        if (heroLogo && heroLogo.classList.contains('logo-hidden')) {
-          heroLogo.classList.remove('logo-hidden');
-          heroLogo.classList.add('logo-visible');
-        }
-      }, { once: true });
     }
 
     // Check if we should skip intro based on cache
