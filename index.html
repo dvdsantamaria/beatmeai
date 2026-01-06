@@ -177,8 +177,8 @@
       position: relative;
       z-index: 10;
       opacity: 0;
-      /* Blue color using hue-rotate: white -> blue #4343FF */
-      filter: brightness(1.2) saturate(2) hue-rotate(220deg);
+      /* Keep logo white */
+      filter: brightness(0) invert(1);
       transition: filter 0.15s ease-out;
     }
 
@@ -195,8 +195,8 @@
       height: 100%;
       transform: translate(calc(var(--index) * var(--h) * 0.8px),
           calc(var(--index) * var(--v) * 0.8px)) scale(calc(1 + var(--index) * 0.002));
-      /* Blue color for shadow copies */
-      filter: brightness(1.2) saturate(2) hue-rotate(220deg) blur(calc(var(--index) * 0.08px));
+      /* White base with blue glow */
+      filter: brightness(0) invert(1) blur(calc(var(--index) * 0.08px)) drop-shadow(0 0 calc(var(--index) * 1px) rgba(67, 67, 255, 0.5));
       opacity: var(--opacity);
       pointer-events: none;
       z-index: calc(10 - var(--index));
@@ -225,9 +225,9 @@
       }
     }
 
-    /* Primary color tint for shadow copies */
+    /* Primary color tint for outer shadow copies */
     .logo-shadow-copy.accent-tint {
-      filter: brightness(1.2) saturate(2) hue-rotate(220deg) blur(calc(var(--index) * 0.1px)) drop-shadow(0 0 calc(var(--index) * 1.5px) rgba(67, 67, 255, 0.4));
+      filter: brightness(0) invert(1) blur(calc(var(--index) * 0.1px)) drop-shadow(0 0 calc(var(--index) * 2px) rgba(67, 67, 255, 0.6));
     }
 
     @keyframes logo-entrance {
