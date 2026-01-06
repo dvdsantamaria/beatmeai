@@ -225,9 +225,9 @@
       }
     }
 
-    /* Blue tint for outer copies - optimized with hue-rotate */
+    /* Blue tint with exact color rgb(14, 145, 227) */
     .logo-shadow-copy.accent-tint {
-      filter: brightness(0.9) invert(1) saturate(1.8) hue-rotate(220deg) blur(calc(var(--index) * 0.2px));
+      filter: brightness(0) invert(1) blur(calc(var(--index) * 0.2px)) drop-shadow(0 0 calc(var(--index) * 3px) rgba(14, 145, 227, 0.8));
     }
 
     @keyframes logo-entrance {
