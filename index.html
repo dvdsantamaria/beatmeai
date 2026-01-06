@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Content Architecture for Creators | Design Content with Intention</title>
+  <meta name="description"
+    content="An intent-driven content creation course for creators and filmmakers. Learn to design content with AI as a support system, not a shortcut.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&family=Lobster&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+    rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'deep-black': '#0a0a0a',
+            'off-black': '#111111',
+            'card-dark': '#151515',
+            'warm-grey': '#e8e8e0',
+            'accent': '#4343FF',
+            'accent-hover': '#5555FF',
+            'mint': '#9EF0A0',
+            'lavender': '#B2A5FE',
+          },
+          fontFamily: {
+            'sans': ['Open Sans', 'system-ui', 'sans-serif'],
+            'display': ['Comfortaa', 'cursive'],
+            'heading': ['Lobster', 'cursive'],
+          },
+        }
+      }
+    }
+  </script>
+
+  <style>
+    * {
+      font-family: 'Open Sans', sans-serif;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: #0a0a0a;
+      color: #ffffff;
+    }
+
+    /* Block scroll during intro */
+    body.no-scroll {
+      overflow: hidden;
+      height: 100vh;
+    }
+
+    /* Marquee Animation */
+    @keyframes marquee {
+      0% {
+        transform: translateX(0);
+      }
+
+      100% {
+        transform: translateX(-50%);
+      }
+    }
+
+    .animate-marquee {
+      animation: marquee 20s linear infinite;
+    }
+
+    .animate-marquee:hover {
+      animation-play-state: paused;
+    }
+
+    /* AI Text with fade-in and glow effect */
+    .ai-text {
+      opacity: 0;
+      animation: ai-entrance 1s ease-out 1s forwards, ai-glow 1s ease-out 1s;
+      filter: drop-shadow(0 0 0px rgba(158, 240, 160, 0));
+    }
+
+    .ai-text.loaded {
+      background: linear-gradient(180deg,
+          #ffffff 0%,
+          #ffffff 50%,
+          rgba(158, 240, 160, 0.3) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      filter: drop-shadow(0 4px 12px rgba(158, 240, 160, 0.1));
+    }
+
+    @keyframes ai-entrance {
+      0% {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes ai-glow {
+      0% {
+        filter: drop-shadow(0 0 0px rgba(158, 240, 160, 0));
+      }
+
+      50% {
+        filter: drop-shadow(0 0 60px rgba(158, 240, 160, 0.8)) drop-shadow(0 0 120px rgba(255, 255, 255, 0.6));
+      }
+
+      100% {
+        filter: drop-shadow(0 4px 12px rgba(158, 240, 160, 0.1));
+      }
+    }
+
+    /* Scroll Indicator */
+    @keyframes scroll-dot {
+      0% {
+        transform: translateY(0);
+        opacity: 1;
+      }
+
+      100% {
+        transform: translateY(12px);
+        opacity: 0;
+      }
+    }
+
+    .animate-scroll-dot {
+      animation: scroll-dot 1.5s ease-in-out infinite;
+    }
+
+    /* Card Glow Effect */
+    .card-glow {
+      transition: all 0.3s ease;
+    }
+
+    .card-glow:hover {
+      box-shadow: 0 0 40px rgba(255, 107, 53, 0.15);
+      transform: translateY(-4px);
+    }
+
+    /* Accordion Animation */
+    .accordion-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease, opacity 0.3s ease;
+      opacity: 0;
+    }
+
+    .accordion-content.open {
+      max-height: 500px;
+      opacity: 1;
+    }
+
+    /* Button Shine Effect */
+    .btn-primary {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg,
+          transparent 40%,
+          rgba(255, 255, 255, 0.1) 50%,
+          transparent 60%);
+      transform: translateX(-100%);
+      transition: transform 0.6s;
+    }
+
+    .btn-primary:hover::after {
+      transform: translateX(100%);
+    }
+
+    /* Testimonial Carousel */
+    .testimonial-track {
+      display: flex;
+      gap: 24px;
+      animation: testimonial-scroll 30s linear infinite;
+    }
+
+    @keyframes testimonial-scroll {
+      0% {
+        transform: translateX(0);
+      }
+
+      100% {
+        transform: translateX(-50%);
+      }
+    }
+
+    .testimonial-track:hover {
+      animation-play-state: paused;
+    }
+
+    /* Feature Badge */
+    .feature-badge {
+      backdrop-filter: blur(12px);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* Intro Video Overlay */
+    #intro-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background-color: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #intro-overlay video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    #intro-overlay .fade-overlay {
+      position: absolute;
+      inset: 0;
+      background-color: #000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.33s ease;
+    }
+
+    #intro-overlay .fade-overlay.active {
+      opacity: 1;
+    }
+
+    #intro-overlay.hidden {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.8s ease;
+    }
+
+    /* Main content initially hidden */
+    #main-content {
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+
+    #main-content.visible {
+      opacity: 1;
+    }
+  </style>
+</head>
+
+<body class="bg-warm-grey text-deep-black antialiased selection:bg-accent selection:text-white no-scroll">
+
+  <!-- Intro Video Overlay -->
+  <div id="intro-overlay">
+    <video id="intro-video" autoplay muted playsinline>
+      <source src="video_intro.mp4" type="video/mp4">
+    </video>
+    <div class="fade-overlay" id="fade-overlay"></div>
+  </div>
+
+  <!-- Main Content Wrapper -->
+  <div id="main-content">
+
+    <!-- Hero Section -->
+    <header class="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
+      <!-- Video Background -->
+      <video id="hero-video" autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover">
+        <source src="video0.mp4" type="video/mp4">
+      </video>
+
+      <!-- Dark Overlay removed for full video visibility -->
+
+      <!-- Content -->
+      <div class="relative z-10 text-center">
+        <!-- Main AI Text -->
+        <!-- <h1 id="hero-ai-text"
+          class="ai-text text-[4.5rem] md:text-[8rem] lg:text-[12rem] font-black tracking-tighter leading-none font-display">
+          AI
+        </h1> -->
+      </div>
+
+      <!-- Scroll Indicator -->
+      <div class="absolute bottom-10 left-1/2 -translate-x-1/2 z-10">
+        <div class="w-6 h-10 border-2 border-white/30 rounded-full flex items-start justify-center p-1.5">
+          <div class="w-1.5 h-3 bg-white/60 rounded-full animate-scroll-dot"></div>
+        </div>
+      </div>
+    </header>
+
+
+
+    <!-- Problem + Solution Combined Section -->
+    <section class="py-24 md:py-32 px-6 bg-warm-grey">
+      <div class="max-w-7xl mx-auto">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-start">
+          <!-- Left: THE PROBLEM -->
+          <div>
+            <div class="flex items-center gap-4 mb-8">
+              <div class="h-px w-12 bg-accent"></div>
+              <span class="text-xs font-bold uppercase tracking-[0.25em] text-accent">The Problem</span>
+            </div>
+            <h2 class="text-4xl md:text-5xl lg:text-6xl font-black uppercase leading-[1.1] tracking-tight mb-8">
+              AI Made Content Faster.<br>
+              <span class="text-deep-black/40">It Also Made Content Emptier.</span>
+            </h2>
+            <p class="text-lg text-deep-black/60 leading-relaxed">
+              Most creators start with format. Then they guess the message. Then they wonder why nothing lands. This
+              architecture fixes the order.
+            </p>
+          </div>
+
+          <!-- Right: THE SOLUTION -->
+          <div>
+            <div class="flex items-center gap-4 mb-8">
+              <div class="h-px w-12 bg-accent"></div>
+              <span class="text-xs font-bold uppercase tracking-[0.25em] text-accent">The Solution</span>
+            </div>
+            <h2 class="text-4xl md:text-5xl lg:text-6xl font-black uppercase leading-[1.1] tracking-tight mb-8">
+              Content Is<br>
+              <span class="text-accent">Designed.</span>
+            </h2>
+            <p class="text-lg text-deep-black/60 leading-relaxed mb-10">
+              This teaches creators and filmmakers how to design content with intention, using AI as a support system
+              for better decisions, not as a shortcut.
+            </p>
+
+            <div class="flex flex-wrap items-center gap-6">
+              <a href="#get-started"
+                class="btn-primary inline-flex items-center gap-3 px-8 py-4 bg-accent hover:bg-accent-hover text-white rounded-full font-bold uppercase tracking-wider transition-all">
+                Access the Content
+              </a>
+              <div class="flex gap-8 border-l border-deep-black/20 pl-6">
+                <div>
+                  <span class="block text-2xl font-bold">14</span>
+                  <span class="text-xs text-deep-black/50 uppercase tracking-wider">Blocks</span>
+                </div>
+                <div>
+                  <span class="block text-2xl font-bold">70+</span>
+                  <span class="text-xs text-deep-black/50 uppercase tracking-wider">Videos</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- What This Is Card - HIDDEN -->
+        <div class="hidden bg-card-dark border border-white/5 rounded-2xl p-8 card-glow mt-16">
+          <h3 class="text-xl font-bold uppercase tracking-wide mb-6">What This Is</h3>
+          <p class="text-white/60 text-sm mb-8 leading-relaxed">
+            A complete content architecture that aligns intent, message, form, and distribution so your content
+            compounds.
+          </p>
+
+          <div class="space-y-4 mb-10">
+            <div class="flex items-start gap-4">
+              <div class="h-2 w-2 rounded-full mt-2 bg-mint"></div>
+              <span class="text-white/70 text-sm">Intent-driven structure that scales across formats.</span>
+            </div>
+            <div class="flex items-start gap-4">
+              <div class="h-2 w-2 rounded-full mt-2 bg-accent"></div>
+              <span class="text-white/70 text-sm">AI support without surrendering taste or voice.</span>
+            </div>
+            <div class="flex items-start gap-4">
+              <div class="h-2 w-2 rounded-full mt-2 bg-lavender"></div>
+              <span class="text-white/70 text-sm">A full series with blocks, breakdowns, and decision logic.</span>
+            </div>
+          </div>
+
+          <!-- Stats Row -->
+          <div class="grid grid-cols-4 gap-4 pt-6 border-t border-white/10">
+            <div class="text-center">
+              <span class="block text-2xl font-bold">5</span>
+              <span class="text-[10px] text-white/40 uppercase tracking-wider">Layers</span>
+            </div>
+            <div class="text-center">
+              <span class="block text-2xl font-bold text-mint">14</span>
+              <span class="text-[10px] text-white/40 uppercase tracking-wider">Blocks</span>
+            </div>
+            <div class="text-center">
+              <span class="block text-2xl font-bold text-lavender">1:1</span>
+              <span class="text-[10px] text-white/40 uppercase tracking-wider">Coaching</span>
+            </div>
+            <div class="text-center">
+              <span class="block text-2xl font-bold text-accent">AI</span>
+              <span class="text-[10px] text-white/40 uppercase tracking-wider">Powered</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- What You Get Section - Horizontal Timeline -->
+    <section class="py-24 md:py-32 px-6 mx-4 md:mx-8 bg-deep-black rounded-3xl">
+      <div class="max-w-6xl mx-auto">
+        <!-- Section Label -->
+        <div class="flex items-center gap-4 mb-12">
+          <div class="h-px w-12 bg-white/30"></div>
+          <span class="text-xs font-bold uppercase tracking-[0.25em] text-white/60">What You Get</span>
+        </div>
+
+        <h2
+          class="text-4xl md:text-5xl lg:text-6xl font-black uppercase leading-[1.1] tracking-tight mb-20 text-center md:text-left text-white">
+          Not Tips. Not Tool Hype.<br>
+          <span class="text-white/40">A Repeatable Way of Thinking.</span>
+        </h2>
+
+        <!-- Horizontal Timeline - Desktop -->
+        <div class="hidden md:block">
+          <div class="relative py-20">
+            <!-- Horizontal Line -->
+            <div class="absolute top-1/2 left-[10%] right-[10%] h-1 bg-accent -translate-y-1/2 rounded-full"></div>
+
+            <!-- 3 Steps -->
+            <div class="relative flex justify-between px-[5%]">
+
+              <!-- Step 1 -->
+              <div class="flex flex-col items-center" style="width: 28%;">
+                <!-- Text Above -->
+                <div class="text-center mb-4">
+                  <h3 class="text-base font-bold uppercase tracking-wide mb-2 font-display text-white">A Structure You
+                    Can Reuse</h3>
+                  <p class="text-white/50 text-sm leading-relaxed">
+                    Not trends. Not hacks. A framework that works for any content, any platform.
+                  </p>
+                </div>
+                <!-- Vertical Line -->
+                <div class="w-px h-6 bg-white/30"></div>
+                <!-- Circle -->
+                <div
+                  class="w-16 h-16 rounded-full border-2 border-dashed border-white/40 bg-[#0d1420] flex items-center justify-center z-10">
+                  <span class="iconify text-xl text-white/70" data-icon="solar:layers-bold-duotone"></span>
+                </div>
+              </div>
+
+              <!-- Step 2 -->
+              <div class="flex flex-col items-center" style="width: 28%;">
+                <!-- Circle First -->
+                <div
+                  class="w-16 h-16 rounded-full border-4 border-accent bg-[#0d1420] flex items-center justify-center z-10">
+                  <span class="iconify text-xl text-white/70" data-icon="solar:chat-round-check-bold-duotone"></span>
+                </div>
+                <!-- Vertical Line -->
+                <div class="w-px h-6 bg-white/30"></div>
+                <!-- Text Below -->
+                <div class="text-center mt-4">
+                  <h3 class="text-base font-bold uppercase tracking-wide mb-2 font-display text-white">A Language for
+                    Decisions</h3>
+                  <p class="text-white/50 text-sm leading-relaxed">
+                    Explain your choices to yourself, to clients, and to brands with clarity.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Step 3 -->
+              <div class="flex flex-col items-center" style="width: 28%;">
+                <!-- Text Above -->
+                <div class="text-center mb-4">
+                  <h3 class="text-base font-bold uppercase tracking-wide mb-2 font-display text-white">A Workflow That
+                    Scales</h3>
+                  <p class="text-white/50 text-sm leading-relaxed">
+                    One idea turns into many outputs without becoming noise.
+                  </p>
+                </div>
+                <!-- Vertical Line -->
+                <div class="w-px h-6 bg-white/30"></div>
+                <!-- Circle -->
+                <div
+                  class="w-16 h-16 rounded-full border-2 border-dashed border-white/40 bg-[#0d1420] flex items-center justify-center z-10">
+                  <span class="iconify text-2xl text-white/70" data-icon="solar:chart-2-bold-duotone"></span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Vertical Timeline - Mobile -->
+        <div class="md:hidden relative">
+          <div class="absolute left-8 top-0 bottom-0 w-1 bg-accent rounded-full"></div>
+
+          <div class="space-y-10 pl-20">
+            <!-- Step 1 -->
+            <div class="relative">
+              <div
+                class="absolute -left-12 top-0 w-14 h-14 rounded-full border-2 border-dashed border-white/40 bg-[#0d1420] flex items-center justify-center">
+                <span class="iconify text-xl text-white/70" data-icon="solar:layers-bold-duotone"></span>
+              </div>
+              <h3 class="text-base font-bold uppercase tracking-wide mb-2 font-display">A Structure You Can Reuse</h3>
+              <p class="text-white/50 text-sm leading-relaxed">
+                Not trends. Not hacks. A framework that works for any content, any platform.
+              </p>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="relative">
+              <div
+                class="absolute -left-12 top-0 w-14 h-14 rounded-full border-4 border-accent bg-[#0d1420] flex items-center justify-center">
+                <span class="iconify text-xl text-white/70" data-icon="solar:chat-round-check-bold-duotone"></span>
+              </div>
+              <h3 class="text-base font-bold uppercase tracking-wide mb-2 font-display">A Language for Decisions</h3>
+              <p class="text-white/50 text-sm leading-relaxed">
+                Explain your choices to yourself, to clients, and to brands with clarity.
+              </p>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="relative">
+              <div
+                class="absolute -left-12 top-0 w-14 h-14 rounded-full border-2 border-dashed border-white/40 bg-[#0d1420] flex items-center justify-center">
+                <span class="iconify text-xl text-white/70" data-icon="solar:chart-2-bold-duotone"></span>
+              </div>
+              <h3 class="text-base font-bold uppercase tracking-wide mb-2 font-display">A Workflow That Scales</h3>
+              <p class="text-white/50 text-sm leading-relaxed">
+                One idea turns into many outputs without becoming noise.
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- Full Width Video 1 -->
+    <section class="py-6 px-4 md:px-8 bg-warm-grey">
+      <div class="max-w-7xl mx-auto overflow-hidden rounded-3xl">
+        <video autoplay muted loop playsinline class="w-full h-auto" data-lazy>
+          <source data-src="video1.mp4" type="video/mp4">
+        </video>
+      </div>
+    </section>
+
+
+    <!-- Course Structure / Accordion Section -->
+    <section id="structure" class="py-24 md:py-32 px-6 mx-4 md:mx-8 bg-deep-black rounded-3xl">
+      <div class="max-w-7xl mx-auto">
+        <div class="mb-16">
+          <div class="flex items-center gap-4 mb-6">
+            <div class="h-px w-12 bg-accent"></div>
+            <span class="text-xs font-bold uppercase tracking-[0.25em] text-accent">The Structure</span>
+          </div>
+          <h2
+            class="text-4xl md:text-5xl lg:text-6xl font-black uppercase leading-[1.1] tracking-tight text-white mb-6">
+            Intent-Driven<br>Content Architecture.
+          </h2>
+          <p class="text-white/50 text-lg max-w-3xl leading-relaxed">
+            A simple way to build content that has a reason to exist. Design content from the inside out.
+          </p>
+        </div>
+
+        <!-- Accordion -->
+        <div class="border-t border-white/10">
+          <!-- Layer 1 -->
+          <div class="accordion-item border-b border-white/10" data-index="0">
+            <button class="accordion-trigger w-full py-8 flex justify-between items-center text-left group"
+              onclick="toggleAccordion(0)">
+              <div class="flex items-center gap-6">
+                <span class="text-xs font-bold text-white/30 uppercase tracking-wider">01</span>
+                <h3
+                  class="text-2xl md:text-3xl font-bold uppercase tracking-tight group-hover:text-accent transition-colors text-white"
+                  id="acc-title-0">Intent Layer</h3>
+              </div>
+              <div
+                class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-accent transition-colors"
+                id="acc-icon-wrap-0">
+                <span class="iconify text-2xl transition-transform" id="acc-icon-0"
+                  data-icon="solar:add-circle-bold-duotone"></span>
+              </div>
+            </button>
+            <div class="accordion-content pl-[calc(0.75rem+1.5rem)]" id="acc-content-0">
+              <p class="text-white/50 text-lg pb-8 max-w-3xl leading-relaxed">
+                Define the purpose in one sentence that controls everything else. Learn why creators need architecture,
+                not more ideas.
+              </p>
+            </div>
+          </div>
+
+          <!-- Layer 2 -->
+          <div class="accordion-item border-b border-white/10" data-index="1">
+            <button class="accordion-trigger w-full py-8 flex justify-between items-center text-left group"
+              onclick="toggleAccordion(1)">
+              <div class="flex items-center gap-6">
+                <span class="text-xs font-bold text-white/30 uppercase tracking-wider">02</span>
+                <h3
+                  class="text-2xl md:text-3xl font-bold uppercase tracking-tight group-hover:text-accent transition-colors text-white"
+                  id="acc-title-1">Message Layer</h3>
+              </div>
+              <div
+                class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-accent transition-colors"
+                id="acc-icon-wrap-1">
+                <span class="iconify text-2xl transition-transform" id="acc-icon-1"
+                  data-icon="solar:add-circle-bold-duotone"></span>
+              </div>
+            </button>
+            <div class="accordion-content pl-[calc(0.75rem+1.5rem)]" id="acc-content-1">
+              <p class="text-white/50 text-lg pb-8 max-w-3xl leading-relaxed">
+                Choose one message and remove the rest. Learn how to define intent in plain language that guides every
+                decision you make.
+              </p>
+            </div>
+          </div>
+
+          <!-- Layer 3 -->
+          <div class="accordion-item border-b border-white/10" data-index="2">
+            <button class="accordion-trigger w-full py-8 flex justify-between items-center text-left group"
+              onclick="toggleAccordion(2)">
+              <div class="flex items-center gap-6">
+                <span class="text-xs font-bold text-white/30 uppercase tracking-wider">03</span>
+                <h3
+                  class="text-2xl md:text-3xl font-bold uppercase tracking-tight group-hover:text-accent transition-colors text-white"
+                  id="acc-title-2">Form Layer</h3>
+              </div>
+              <div
+                class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-accent transition-colors"
+                id="acc-icon-wrap-2">
+                <span class="iconify text-2xl transition-transform" id="acc-icon-2"
+                  data-icon="solar:add-circle-bold-duotone"></span>
+              </div>
+            </button>
+            <div class="accordion-content pl-[calc(0.75rem+1.5rem)]" id="acc-content-2">
+              <p class="text-white/50 text-lg pb-8 max-w-3xl leading-relaxed">
+                Design the experience (visuals, audio, structure) around the message. Learn how form follows intent, not
+                trends.
+              </p>
+            </div>
+          </div>
+
+          <!-- Layer 4 -->
+          <div class="accordion-item border-b border-white/10" data-index="3">
+            <button class="accordion-trigger w-full py-8 flex justify-between items-center text-left group"
+              onclick="toggleAccordion(3)">
+              <div class="flex items-center gap-6">
+                <span class="text-xs font-bold text-white/30 uppercase tracking-wider">04</span>
+                <h3
+                  class="text-2xl md:text-3xl font-bold uppercase tracking-tight group-hover:text-accent transition-colors text-white"
+                  id="acc-title-3">Distribution & Action Layers</h3>
+              </div>
+              <div
+                class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-accent transition-colors"
+                id="acc-icon-wrap-3">
+                <span class="iconify text-2xl transition-transform" id="acc-icon-3"
+                  data-icon="solar:add-circle-bold-duotone"></span>
+              </div>
+            </button>
+            <div class="accordion-content pl-[calc(0.75rem+1.5rem)]" id="acc-content-3">
+              <p class="text-white/50 text-lg pb-8 max-w-3xl leading-relaxed">
+                Adapt for the platform without changing the intent. Design next steps that feel natural, not salesy.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Video Series Blocks Grid -->
+    <section id="series" class="py-24 md:py-32 px-6 bg-warm-grey">
+      <div class="max-w-7xl mx-auto">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 mb-16">
+          <div>
+            <div class="flex items-center gap-4 mb-6">
+              <div class="h-px w-12 bg-deep-black/30"></div>
+              <span class="text-xs font-bold uppercase tracking-[0.25em] text-deep-black/60">Video Series</span>
+            </div>
+            <h2 class="text-4xl md:text-5xl lg:text-6xl font-black uppercase leading-[1.1] tracking-tight">
+              14 Blocks. 70+ Videos.
+            </h2>
+          </div>
+          <a href="#get-started"
+            class="btn-primary inline-flex items-center gap-3 px-6 py-3 bg-white text-deep-black rounded-full font-bold text-sm uppercase tracking-wider hover:bg-white/90 transition-all">
+            Access All Blocks
+            <span class="iconify" data-icon="solar:arrow-right-bold"></span>
+          </a>
+        </div>
+
+        <!-- Asymmetric Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Block 1-5 -->
+          <div class="group bg-card-dark border border-white/5 rounded-2xl overflow-hidden card-glow">
+            <div class="bg-gradient-to-br from-accent/20 to-accent/5 p-8">
+              <span class="text-xs font-bold uppercase tracking-[0.25em] text-accent">Block 1-5</span>
+              <h3 class="text-2xl font-bold uppercase tracking-tight mt-3 mb-3 text-white">Foundation & Intent</h3>
+              <p class="text-white/50 text-sm leading-relaxed">
+                From content creation to architecture. Intent-driven thinking. Understanding audience. Brand as
+                constraint.
+              </p>
+            </div>
+            <div class="p-6 flex justify-between items-center border-t border-white/5">
+              <p class="text-white/40 text-sm">Why "more content" is not a strategy</p>
+              <div
+                class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-accent transition-colors">
+                <span class="iconify text-lg" data-icon="solar:arrow-right-up-bold"></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Block 6-10 -->
+          <div class="group bg-card-dark border border-white/5 rounded-2xl overflow-hidden card-glow">
+            <div class="bg-gradient-to-br from-lavender/20 to-lavender/5 p-8">
+              <span class="text-xs font-bold uppercase tracking-[0.25em] text-lavender">Block 6-10</span>
+              <h3 class="text-2xl font-bold uppercase tracking-tight mt-3 mb-3 text-white">Production & Execution</h3>
+              <p class="text-white/50 text-sm leading-relaxed">
+                Content building blocks. Prompt strategy. Pre-production. Post-production. Visual identity.
+              </p>
+            </div>
+            <div class="p-6 flex justify-between items-center border-t border-white/5">
+              <p class="text-white/40 text-sm">Where AI helps, where it creates complexity</p>
+              <div
+                class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-lavender transition-colors">
+                <span class="iconify text-lg" data-icon="solar:arrow-right-up-bold"></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Block 11-12 -->
+          <div class="group bg-card-dark border border-white/5 rounded-2xl overflow-hidden card-glow">
+            <div class="bg-gradient-to-br from-mint/20 to-mint/5 p-8">
+              <span class="text-xs font-bold uppercase tracking-[0.25em] text-mint">Block 11-12</span>
+              <h3 class="text-2xl font-bold uppercase tracking-tight mt-3 mb-3 text-white">Brands & Scale</h3>
+              <p class="text-white/50 text-sm leading-relaxed">
+                Content for brands and campaigns. Scaling without losing meaning. Cross-platform architecture.
+              </p>
+            </div>
+            <div class="p-6 flex justify-between items-center border-t border-white/5">
+              <p class="text-white/40 text-sm">One idea, multiple outputs without noise</p>
+              <div
+                class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-mint transition-colors">
+                <span class="iconify text-lg text-deep-black" data-icon="solar:arrow-right-up-bold"></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Block 13-14 -->
+          <div class="group bg-card-dark border border-white/5 rounded-2xl overflow-hidden card-glow">
+            <div class="bg-gradient-to-br from-white/10 to-white/5 p-8">
+              <span class="text-xs font-bold uppercase tracking-[0.25em] text-white/70">Block 13-14</span>
+              <h3 class="text-2xl font-bold uppercase tracking-tight mt-3 mb-3 text-white">Real World & Authority</h3>
+              <p class="text-white/50 text-sm leading-relaxed">
+                Full project breakdowns. Authority in the AI era. Taste, judgment, decision-making.
+              </p>
+            </div>
+            <div class="p-6 flex justify-between items-center border-t border-white/5">
+              <p class="text-white/40 text-sm">Creators as architects, not producers</p>
+              <div
+                class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-white transition-colors">
+                <span class="iconify text-lg" data-icon="solar:arrow-right-up-bold"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Full Width Video 2 -->
+    <section class="py-6 px-4 md:px-8 bg-warm-grey">
+      <div class="max-w-7xl mx-auto overflow-hidden rounded-3xl">
+        <video autoplay muted loop playsinline class="w-full h-auto" data-lazy>
+          <source data-src="video2.mp4" type="video/mp4">
+        </video>
+      </div>
+    </section>
+
+
+    <!-- Is This For You Section -->
+    <section class="py-24 md:py-32 px-6 bg-warm-grey">
+      <div class="max-w-7xl mx-auto">
+        <div class="text-center mb-16">
+          <!-- <div class="inline-flex items-center gap-4 mb-8">
+            <div class="h-px w-12 bg-white/30"></div>
+            <span class="text-xs font-bold uppercase tracking-[0.25em] text-white/60">For You?</span>
+            <div class="h-px w-12 bg-white/30"></div>
+          </div> -->
+          <h2 class="text-4xl md:text-5xl lg:text-6xl font-black uppercase leading-[1.1] tracking-tight">
+            Is This For You?
+          </h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+          <!-- YUP Column -->
+          <div class="bg-card-dark border border-mint/20 rounded-2xl p-8">
+            <div class="flex items-center gap-3 mb-8">
+              <div class="w-10 h-10 rounded-full bg-mint flex items-center justify-center">
+                <span class="iconify text-xl text-deep-black" data-icon="solar:check-circle-bold"></span>
+              </div>
+              <h3 class="text-2xl font-black uppercase tracking-tight text-mint">YES</h3>
+            </div>
+            <ul class="space-y-4">
+              <li class="flex items-start gap-3">
+                <span class="iconify text-mint text-lg mt-0.5" data-icon="solar:check-read-bold"></span>
+                <span class="text-white/70 text-sm">Filmmakers building an audience</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="iconify text-mint text-lg mt-0.5" data-icon="solar:check-read-bold"></span>
+                <span class="text-white/70 text-sm">Creators who want consistency without burnout</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="iconify text-mint text-lg mt-0.5" data-icon="solar:check-read-bold"></span>
+                <span class="text-white/70 text-sm">Editors who want a stronger creative voice</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="iconify text-mint text-lg mt-0.5" data-icon="solar:check-read-bold"></span>
+                <span class="text-white/70 text-sm">Brands who need a clear system for deliverables</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="iconify text-mint text-lg mt-0.5" data-icon="solar:check-read-bold"></span>
+                <span class="text-white/70 text-sm">Anyone tired of random posting</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- NOPE Column -->
+          <div class="bg-card-dark border border-white/5 rounded-2xl p-8">
+            <div class="flex items-center gap-3 mb-8">
+              <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
+                <span class="iconify text-xl text-white/50" data-icon="solar:close-circle-bold"></span>
+              </div>
+              <h3 class="text-2xl font-black uppercase tracking-tight text-white/50">NO</h3>
+            </div>
+            <ul class="space-y-4">
+              <li class="flex items-start gap-3">
+                <span class="iconify text-white/30 text-lg mt-0.5" data-icon="solar:close-square-bold"></span>
+                <span class="text-white/40 text-sm">People who settle for "good enough"</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="iconify text-white/30 text-lg mt-0.5" data-icon="solar:close-square-bold"></span>
+                <span class="text-white/40 text-sm">Those who dismiss the role of AI in modern systems</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="iconify text-white/30 text-lg mt-0.5" data-icon="solar:close-square-bold"></span>
+                <span class="text-white/40 text-sm">Creators unwilling to invest in strategic design</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="iconify text-white/30 text-lg mt-0.5" data-icon="solar:close-square-bold"></span>
+                <span class="text-white/40 text-sm">People who blame the algorithm instead of improving</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="iconify text-white/30 text-lg mt-0.5" data-icon="solar:close-square-bold"></span>
+                <span class="text-white/40 text-sm">Anyone looking for shortcuts instead of systems</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- 1:1 Coaching Section -->
+    <section id="coaching" class="py-24 md:py-32 px-6 mx-4 md:mx-8 bg-deep-black rounded-3xl">
+      <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+        <!-- Left Column: Title, Button -->
+        <div>
+          <div class="flex items-center gap-4 mb-8">
+            <div class="h-px w-12 bg-accent"></div>
+            <span class="text-xs font-bold uppercase tracking-[0.25em] text-accent">1:1 Coaching</span>
+          </div>
+
+          <h2
+            class="text-4xl md:text-5xl lg:text-6xl font-black uppercase leading-[1.1] tracking-tight mb-10 text-white">
+            Apply the Structure to Your Real Projects.
+          </h2>
+
+          <a href="#get-started"
+            class="btn-primary inline-flex items-center gap-3 px-8 py-4 bg-accent hover:bg-accent-hover text-white rounded-full font-bold uppercase tracking-wider transition-all">
+            Book a 1:1 Call
+            <span class="iconify" data-icon="solar:arrow-right-bold"></span>
+          </a>
+          <p class="text-white/40 text-sm mt-4">Limited slots each month.</p>
+        </div>
+
+        <!-- Right Column: Benefits List + Quote -->
+        <div class="space-y-8">
+          <!-- Benefits List Card -->
+          <div class="bg-card-dark border border-white/5 rounded-2xl p-8">
+            <ul class="space-y-4">
+              <li class="flex items-start gap-4">
+                <span class="iconify text-accent text-xl mt-0.5" data-icon="solar:check-circle-bold-duotone"></span>
+                <span class="text-white/70">Positioning and content intent</span>
+              </li>
+              <li class="flex items-start gap-4">
+                <span class="iconify text-accent text-xl mt-0.5" data-icon="solar:check-circle-bold-duotone"></span>
+                <span class="text-white/70">Brand rules and voice</span>
+              </li>
+              <li class="flex items-start gap-4">
+                <span class="iconify text-accent text-xl mt-0.5" data-icon="solar:check-circle-bold-duotone"></span>
+                <span class="text-white/70">Repeatable workflow with AI</span>
+              </li>
+              <li class="flex items-start gap-4">
+                <span class="iconify text-accent text-xl mt-0.5" data-icon="solar:check-circle-bold-duotone"></span>
+                <span class="text-white/70">Your next 10 content pieces (designed, not guessed)</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Quote (no card, just text with big blue quote icon) -->
+          <div class="pt-4">
+            <span class="iconify text-accent text-5xl mb-4 block" data-icon="mdi:format-quote-open"></span>
+            <p class="text-xl md:text-2xl font-bold text-white leading-relaxed mb-3">
+              AI is not the creator. AI helps at every layer, but you stay in control of decisions.
+            </p>
+            <p class="text-white/50 text-sm">You decide what stays, what goes, and what matters.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- Full Width Video 3 -->
+    <section class="py-6 px-4 md:px-8 bg-warm-grey">
+      <div class="max-w-7xl mx-auto overflow-hidden rounded-3xl">
+        <video autoplay muted loop playsinline class="w-full h-auto" data-lazy>
+          <source data-src="video3.mp4" type="video/mp4">
+        </video>
+      </div>
+    </section>
+
+
+    <!-- FAQ Section -->
+    <section id="faq" class="py-24 md:py-32 px-6 mx-4 md:mx-8 bg-deep-black rounded-3xl">
+      <div class="max-w-7xl mx-auto">
+        <div class="flex items-center gap-4 mb-8">
+          <div class="h-px w-12 bg-accent"></div>
+          <span class="text-xs font-bold uppercase tracking-[0.25em] text-accent">FAQ</span>
+        </div>
+
+        <h2 class="text-4xl md:text-5xl lg:text-6xl font-black uppercase leading-[1.1] tracking-tight mb-16 text-white">
+          Questions & Answers
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="bg-card-dark border border-white/5 rounded-2xl p-8 card-glow">
+            <h3 class="text-lg font-bold uppercase tracking-wide mb-4 text-white">Is this a course or a series of
+              videos?</h3>
+            <p class="text-white/50 text-sm leading-relaxed">It is a structured video series you can follow like a
+              course. Each block builds on the previous one.</p>
+          </div>
+
+          <div class="bg-card-dark border border-white/5 rounded-2xl p-8 card-glow">
+            <h3 class="text-lg font-bold uppercase tracking-wide mb-4 text-white">Do I need to be advanced to start?
+            </h3>
+            <p class="text-white/50 text-sm leading-relaxed">No. The early blocks explain the core thinking. The later
+              blocks go deeper into production and scale.</p>
+          </div>
+
+          <div class="bg-card-dark border border-white/5 rounded-2xl p-8 card-glow">
+            <h3 class="text-lg font-bold uppercase tracking-wide mb-4 text-white">Will this make my content generic?
+            </h3>
+            <p class="text-white/50 text-sm leading-relaxed">Only if you let AI decide. This structure keeps intent,
+              voice, and constraints in front.</p>
+          </div>
+
+          <div class="bg-card-dark border border-white/5 rounded-2xl p-8 card-glow">
+            <h3 class="text-lg font-bold uppercase tracking-wide mb-4 text-white">Do I need specific AI tools?</h3>
+            <p class="text-white/50 text-sm leading-relaxed">No. The structure is tool-agnostic. Use what you have.</p>
+          </div>
+
+          <div class="bg-card-dark border border-white/5 rounded-2xl p-8 card-glow">
+            <h3 class="text-lg font-bold uppercase tracking-wide mb-4 text-white">Is this only for filmmakers?</h3>
+            <p class="text-white/50 text-sm leading-relaxed">No. It works for any visual creator who publishes content.
+            </p>
+          </div>
+
+          <div class="bg-card-dark border border-white/5 rounded-2xl p-8 card-glow">
+            <h3 class="text-lg font-bold uppercase tracking-wide mb-4 text-white">What is the biggest AI mistake?</h3>
+            <p class="text-white/50 text-sm leading-relaxed">Using AI to produce faster instead of using it to think
+              clearer.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- CTA / Get Started Section -->
+    <section id="get-started" class="py-24 md:py-32 px-6 bg-warm-grey">
+      <div class="max-w-5xl mx-auto">
+        <div class="relative bg-card-dark border border-white/5 rounded-3xl p-12 md:p-20 text-center overflow-hidden">
+          <!-- Decorative glows -->
+          <div class="absolute -bottom-20 -left-20 w-64 h-64 bg-accent rounded-full blur-[100px] opacity-20"></div>
+          <div class="absolute -top-20 -right-20 w-64 h-64 bg-lavender rounded-full blur-[100px] opacity-20"></div>
+
+          <div class="relative z-10">
+            <h2
+              class="text-4xl md:text-5xl lg:text-6xl font-black uppercase leading-[1.1] tracking-tight mb-6 text-white">
+              Start Designing Content with Intention.
+            </h2>
+            <p class="text-white/50 text-lg max-w-2xl mx-auto mb-10 leading-relaxed">
+              A complete intent-driven system for creators who want meaning, clarity, and control.
+            </p>
+
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
+              <a href="#"
+                class="btn-primary px-10 py-5 bg-accent hover:bg-accent-hover text-white rounded-full font-bold text-lg uppercase tracking-wider transition-all shadow-lg shadow-accent/20">
+                Access the Content
+              </a>
+              <a href="#coaching"
+                class="px-10 py-5 border border-white/20 text-white rounded-full font-bold text-lg uppercase tracking-wider hover:bg-white/5 transition-all">
+                Book a 1:1 Call
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Second Marquee -->
+    <div class="bg-accent py-4 overflow-hidden">
+      <div class="animate-marquee whitespace-nowrap flex">
+        <span class="mx-8 text-sm font-bold uppercase tracking-widest text-white">
+          DESIGN CONTENT WITH INTENTION • NOT TIPS, NOT TOOL HYPE • A REPEATABLE WAY OF THINKING •
+          DESIGN CONTENT WITH INTENTION • NOT TIPS, NOT TOOL HYPE • A REPEATABLE WAY OF THINKING •
+          DESIGN CONTENT WITH INTENTION • NOT TIPS, NOT TOOL HYPE • A REPEATABLE WAY OF THINKING •
+          DESIGN CONTENT WITH INTENTION • NOT TIPS, NOT TOOL HYPE • A REPEATABLE WAY OF THINKING •
+        </span>
+      </div>
+    </div>
+
+
+    <!-- Footer -->
+    <footer class="py-12 px-6 bg-deep-black border-t border-white/5">
+      <div class="max-w-7xl mx-auto">
+        <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+          <!-- Logo -->
+          <div class="flex items-center gap-3">
+            <img src="logo.svg" alt="Casaca Logo" class="h-10 w-auto">
+            <span class="text-lg font-bold uppercase tracking-tight font-display">Content Architecture</span>
+          </div>
+
+          <!-- Nav Links -->
+          <nav class="flex gap-8 text-sm text-white/40">
+            <a href="#structure" class="hover:text-white transition-colors">Structure</a>
+            <a href="#series" class="hover:text-white transition-colors">Series</a>
+            <a href="#coaching" class="hover:text-white transition-colors">Coaching</a>
+            <a href="#faq" class="hover:text-white transition-colors">FAQ</a>
+          </nav>
+        </div>
+
+        <div class="mt-8 pt-8 border-t border-white/5 text-center">
+          <p class="text-white/30 text-xs uppercase tracking-wider">© 2026 Content Architecture. All Rights Reserved.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+  </div> <!-- End of #main-content -->
+
+
+  <!-- JavaScript -->
+  <script>
+    // Check if intro was shown in last 24 hours
+    function shouldShowIntro() {
+      const lastShown = localStorage.getItem('introLastShown');
+      if (!lastShown) return true;
+
+      const now = Date.now();
+      const hoursSince = (now - parseInt(lastShown)) / (1000 * 60 * 60);
+      return hoursSince >= 24;
+    }
+
+    // Intro Video Logic
+    const introOverlay = document.getElementById('intro-overlay');
+    const introVideo = document.getElementById('intro-video');
+    const fadeOverlay = document.getElementById('fade-overlay');
+    const mainContent = document.getElementById('main-content');
+
+    // Function to trigger AI text animation
+    function triggerAiAnimation() {
+      setTimeout(() => {
+        const heroAiText = document.getElementById('hero-ai-text');
+        if (heroAiText) {
+          heroAiText.classList.add('loaded');
+        }
+      }, 500); // Small delay after content is visible
+    }
+
+    // Check if we should skip intro based on cache
+    if (!shouldShowIntro()) {
+      // Skip intro, show main content immediately
+      introOverlay.style.display = 'none';
+      mainContent.classList.add('visible');
+      document.body.classList.remove('no-scroll');
+      // Trigger AI animation immediately
+      triggerAiAnimation();
+    } else {
+      // Show intro and proceed with normal logic
+      // Check if video metadata is loaded
+      introVideo.addEventListener('loadedmetadata', function () {
+        const duration = introVideo.duration;
+        const fadeStartTime = duration - 0.33; // Start fade 0.33s before end
+
+        // Monitor video time
+        introVideo.addEventListener('timeupdate', function () {
+          if (introVideo.currentTime >= fadeStartTime && !fadeOverlay.classList.contains('active')) {
+            // Start fade to black
+            fadeOverlay.classList.add('active');
+          }
+        });
+
+        // When video ends, transition to main content
+        introVideo.addEventListener('ended', function () {
+          // Save timestamp to localStorage
+          localStorage.setItem('introLastShown', Date.now().toString());
+
+          // Small delay to ensure fade to black is complete
+          setTimeout(() => {
+            // Hide intro overlay
+            introOverlay.classList.add('hidden');
+            // Show main content
+            mainContent.classList.add('visible');
+            // Trigger AI animation after intro ends
+            triggerAiAnimation();
+
+            // Remove intro overlay from DOM after transition
+            setTimeout(() => {
+              introOverlay.style.display = 'none';
+            }, 800);
+
+            // Enable scroll after a small delay
+            setTimeout(() => {
+              document.body.classList.remove('no-scroll');
+            }, 300);
+          }, 200);
+        });
+      });
+
+      // Fallback: If video fails to load, skip intro
+      introVideo.addEventListener('error', function () {
+        introOverlay.style.display = 'none';
+        mainContent.classList.add('visible');
+        document.body.classList.remove('no-scroll');
+        // Trigger AI animation on error fallback
+        triggerAiAnimation();
+      });
+
+      // Option to skip intro on click
+      introOverlay.addEventListener('click', function () {
+        // Save timestamp to localStorage
+        localStorage.setItem('introLastShown', Date.now().toString());
+
+        fadeOverlay.classList.add('active');
+        setTimeout(() => {
+          introOverlay.classList.add('hidden');
+          mainContent.classList.add('visible');
+          // Trigger AI animation after skip
+          triggerAiAnimation();
+
+          setTimeout(() => {
+            introOverlay.style.display = 'none';
+          }, 800);
+          // Enable scroll when skipping
+          setTimeout(() => {
+            document.body.classList.remove('no-scroll');
+          }, 300);
+        }, 500);
+      });
+    } // Close else block for shouldShowIntro
+
+
+    // Accordion functionality
+    function toggleAccordion(index) {
+      const items = document.querySelectorAll('.accordion-item');
+
+      items.forEach((item, i) => {
+        const content = item.querySelector('.accordion-content');
+        const icon = document.getElementById(`acc-icon-${i}`);
+        const iconWrap = document.getElementById(`acc-icon-wrap-${i}`);
+        const title = document.getElementById(`acc-title-${i}`);
+
+        if (i === index) {
+          // Toggle current
+          const isOpen = content.classList.contains('open');
+
+          if (isOpen) {
+            content.classList.remove('open');
+            icon.style.transform = 'rotate(0deg)';
+            iconWrap.classList.remove('bg-accent');
+            iconWrap.classList.add('bg-white/5');
+            title.classList.remove('text-accent');
+          } else {
+            content.classList.add('open');
+            icon.style.transform = 'rotate(45deg)';
+            iconWrap.classList.remove('bg-white/5');
+            iconWrap.classList.add('bg-accent');
+            title.classList.add('text-accent');
+          }
+        } else {
+          // Close others
+          content.classList.remove('open');
+          icon.style.transform = 'rotate(0deg)';
+          iconWrap.classList.remove('bg-accent');
+          iconWrap.classList.add('bg-white/5');
+          title.classList.remove('text-accent');
+        }
+      });
+    }
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+
+    // Lazy load videos when they enter viewport
+    const videoObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const video = entry.target;
+          const source = video.querySelector('source[data-src]');
+          if (source && source.dataset.src) {
+            source.src = source.dataset.src;
+            video.load();
+            videoObserver.unobserve(video);
+          }
+        }
+      });
+    }, { rootMargin: '200px' });
+
+    // Observe all lazy videos (not intro or hero)
+    document.querySelectorAll('video[data-lazy]').forEach(video => {
+      videoObserver.observe(video);
+    });
+  </script>
+
+</body>
+
+</html>
