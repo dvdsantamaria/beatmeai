@@ -203,27 +203,6 @@
       will-change: transform;
     }
 
-    /* Radial burst animation */
-    .logo-shadow-copy.burst-animate {
-      animation: radial-burst 1.5s ease-out forwards;
-    }
-
-    @keyframes radial-burst {
-      0% {
-        transform: translate(0, 0) scale(1);
-        opacity: 0;
-      }
-
-      50% {
-        opacity: var(--opacity);
-      }
-
-      100% {
-        transform: translate(calc(var(--index) * var(--h) * 2px),
-            calc(var(--index) * var(--v) * 2px)) scale(calc(1 + var(--index) * 0.004));
-        opacity: var(--opacity);
-      }
-    }
 
     /* Blue tint with exact color rgb(14, 145, 227) */
     .logo-shadow-copy.accent-tint {
@@ -1380,17 +1359,8 @@
       // Initial state
       updateCopies();
 
-      // Trigger radial burst animation
-      setTimeout(() => {
-        shadowCopies.forEach(copy => {
-          copy.classList.add('burst-animate');
-        });
-
-        // Activate mouse tracking after burst completes
-        setTimeout(() => {
-          attachMouseListeners();
-        }, 1500); // Duration of burst animation
-      }, 100); // Small delay to ensure copies are rendered
+      // Attach mouse listeners immediately (no burst animation)
+      attachMouseListeners();
     }
 
     // Check if we should skip intro based on cache
