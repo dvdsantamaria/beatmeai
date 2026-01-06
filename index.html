@@ -195,12 +195,12 @@
       height: 100%;
       transform: translate(calc(var(--index) * var(--h) * 2px),
           calc(var(--index) * var(--v) * 2px)) scale(calc(1 + var(--index) * 0.004));
-      /* White base with intense blue glow */
-      filter: brightness(0) invert(1) blur(calc(var(--index) * 0.15px)) drop-shadow(0 0 calc(var(--index) * 2px) rgba(67, 67, 255, 0.7)) drop-shadow(0 0 calc(var(--index) * 4px) rgba(67, 67, 255, 0.4)) drop-shadow(0 0 calc(var(--index) * 8px) rgba(67, 67, 255, 0.2));
+      /* Optimized: simple blur without expensive drop-shadows */
+      filter: brightness(0) invert(1) blur(calc(var(--index) * 0.15px));
       opacity: var(--opacity);
       pointer-events: none;
       z-index: calc(10 - var(--index));
-      will-change: transform, opacity;
+      will-change: transform;
     }
 
     /* Radial burst animation */
@@ -225,9 +225,9 @@
       }
     }
 
-    /* Primary color tint for outer shadow copies - more intense */
+    /* Blue tint for outer copies - optimized with hue-rotate */
     .logo-shadow-copy.accent-tint {
-      filter: brightness(0) invert(1) blur(calc(var(--index) * 0.2px)) drop-shadow(0 0 calc(var(--index) * 3px) rgba(67, 67, 255, 0.8)) drop-shadow(0 0 calc(var(--index) * 6px) rgba(67, 67, 255, 0.5)) drop-shadow(0 0 calc(var(--index) * 12px) rgba(67, 67, 255, 0.3));
+      filter: brightness(0.9) invert(1) saturate(1.8) hue-rotate(220deg) blur(calc(var(--index) * 0.2px));
     }
 
     @keyframes logo-entrance {
