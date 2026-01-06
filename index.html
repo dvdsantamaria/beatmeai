@@ -193,10 +193,10 @@
       top: 0;
       width: 100%;
       height: 100%;
-      transform: translate(calc(var(--index) * var(--h) * 0.8px),
-          calc(var(--index) * var(--v) * 0.8px)) scale(calc(1 + var(--index) * 0.002));
-      /* White base with blue glow */
-      filter: brightness(0) invert(1) blur(calc(var(--index) * 0.08px)) drop-shadow(0 0 calc(var(--index) * 1px) rgba(67, 67, 255, 0.5));
+      transform: translate(calc(var(--index) * var(--h) * 2px),
+          calc(var(--index) * var(--v) * 2px)) scale(calc(1 + var(--index) * 0.004));
+      /* White base with intense blue glow */
+      filter: brightness(0) invert(1) blur(calc(var(--index) * 0.15px)) drop-shadow(0 0 calc(var(--index) * 2px) rgba(67, 67, 255, 0.7)) drop-shadow(0 0 calc(var(--index) * 4px) rgba(67, 67, 255, 0.4)) drop-shadow(0 0 calc(var(--index) * 8px) rgba(67, 67, 255, 0.2));
       opacity: var(--opacity);
       pointer-events: none;
       z-index: calc(10 - var(--index));
@@ -219,15 +219,15 @@
       }
 
       100% {
-        transform: translate(calc(var(--index) * var(--h) * 0.8px),
-            calc(var(--index) * var(--v) * 0.8px)) scale(calc(1 + var(--index) * 0.002));
+        transform: translate(calc(var(--index) * var(--h) * 2px),
+            calc(var(--index) * var(--v) * 2px)) scale(calc(1 + var(--index) * 0.004));
         opacity: var(--opacity);
       }
     }
 
-    /* Primary color tint for outer shadow copies */
+    /* Primary color tint for outer shadow copies - more intense */
     .logo-shadow-copy.accent-tint {
-      filter: brightness(0) invert(1) blur(calc(var(--index) * 0.1px)) drop-shadow(0 0 calc(var(--index) * 2px) rgba(67, 67, 255, 0.6));
+      filter: brightness(0) invert(1) blur(calc(var(--index) * 0.2px)) drop-shadow(0 0 calc(var(--index) * 3px) rgba(67, 67, 255, 0.8)) drop-shadow(0 0 calc(var(--index) * 6px) rgba(67, 67, 255, 0.5)) drop-shadow(0 0 calc(var(--index) * 12px) rgba(67, 67, 255, 0.3));
     }
 
     @keyframes logo-entrance {
@@ -1290,9 +1290,9 @@
       const heroSection = logo.closest('header');
       if (!container || !heroSection) return;
 
-      // Configuration
-      const COPIES = 30;  // Reduced for more subtle effect
-      const SCALE_FACTOR = 0.002;  // Smaller scale for subtlety
+      // Configuration - increased for intense effect like the example
+      const COPIES = 50;  // More copies for dense volumetric effect
+      const SCALE_FACTOR = 0.004;  // Match CSS scale
 
       let animationFrame;
       let direction = { h: 1, v: 1 };  // Default: centered glow
@@ -1306,14 +1306,14 @@
         copy.alt = '';
         copy.draggable = false;
 
-        // Calculate opacity: more subtle fade
-        const opacity = Math.max(0.01, 0.6 / i);
+        // Calculate opacity: stronger initial fade for visible rays
+        const opacity = Math.max(0.02, 0.9 / i);
 
         copy.style.setProperty('--index', i);
         copy.style.setProperty('--opacity', opacity);
 
-        // Add accent tint for outer copies
-        if (i > 15) {
+        // Add accent tint for more copies
+        if (i > 10) {
           copy.classList.add('accent-tint');
         }
 
