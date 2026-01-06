@@ -404,7 +404,8 @@
 
         <!-- Hero Subtitle with Typewriter Effect -->
         <div id="hero-subtitle"
-          class="mt-6 text-white/50 text-[10px] md:text-sm font-bold uppercase tracking-[0.4em] min-h-[1.5em]"></div>
+          class="inter-text mt-6 text-white/50 text-[10px] md:text-sm font-bold uppercase tracking-[0.1em] min-h-[1.5em]"
+          style="font-family: 'Inter', sans-serif !important;"></div>
       </div>
 
       <!-- Scroll Indicator
@@ -1213,10 +1214,10 @@
         heroLogo.classList.remove('logo-hidden');
         heroLogo.classList.add('logo-visible');
 
-        // Start typewriter effect after a small delay
+        // Start typewriter effect after logo glow completes (1s delay + 2.5s duration = 3.5s)
         setTimeout(() => {
           typeWriter("hero-subtitle", "Content Architecture", 100);
-        }, 1500);
+        }, 3500);
       }
 
       // Fade in AI text
