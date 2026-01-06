@@ -177,7 +177,8 @@
       position: relative;
       z-index: 10;
       opacity: 0;
-      filter: brightness(0) invert(1);
+      /* Blue color using hue-rotate: white -> blue #4343FF */
+      filter: brightness(1.2) saturate(2) hue-rotate(220deg);
       transition: filter 0.15s ease-out;
     }
 
@@ -194,16 +195,39 @@
       height: 100%;
       transform: translate(calc(var(--index) * var(--h) * 0.8px),
           calc(var(--index) * var(--v) * 0.8px)) scale(calc(1 + var(--index) * 0.002));
-      filter: brightness(0) invert(1) blur(calc(var(--index) * 0.08px));
+      /* Blue color for shadow copies */
+      filter: brightness(1.2) saturate(2) hue-rotate(220deg) blur(calc(var(--index) * 0.08px));
       opacity: var(--opacity);
       pointer-events: none;
       z-index: calc(10 - var(--index));
       will-change: transform, opacity;
     }
 
+    /* Radial burst animation */
+    .logo-shadow-copy.burst-animate {
+      animation: radial-burst 1.5s ease-out forwards;
+    }
+
+    @keyframes radial-burst {
+      0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 0;
+      }
+
+      50% {
+        opacity: var(--opacity);
+      }
+
+      100% {
+        transform: translate(calc(var(--index) * var(--h) * 0.8px),
+            calc(var(--index) * var(--v) * 0.8px)) scale(calc(1 + var(--index) * 0.002));
+        opacity: var(--opacity);
+      }
+    }
+
     /* Primary color tint for shadow copies */
     .logo-shadow-copy.accent-tint {
-      filter: brightness(0) invert(1) blur(calc(var(--index) * 0.1px)) drop-shadow(0 0 calc(var(--index) * 1.5px) rgba(67, 67, 255, 0.3));
+      filter: brightness(1.2) saturate(2) hue-rotate(220deg) blur(calc(var(--index) * 0.1px)) drop-shadow(0 0 calc(var(--index) * 1.5px) rgba(67, 67, 255, 0.4));
     }
 
     @keyframes logo-entrance {
@@ -1343,12 +1367,30 @@
         animateBack();
       }
 
-      // Attach listeners
-      heroSection.addEventListener('mousemove', handleMouseMove);
-      heroSection.addEventListener('mouseleave', handleMouseLeave);
+      // Attach listeners (deferred until after burst animation)
+      let listenersAttached = false;
+
+      function attachMouseListeners() {
+        if (listenersAttached) return;
+        heroSection.addEventListener('mousemove', handleMouseMove);
+        heroSection.addEventListener('mouseleave', handleMouseLeave);
+        listenersAttached = true;
+      }
 
       // Initial state
       updateCopies();
+
+      // Trigger radial burst animation
+      setTimeout(() => {
+        shadowCopies.forEach(copy => {
+          copy.classList.add('burst-animate');
+        });
+
+        // Activate mouse tracking after burst completes
+        setTimeout(() => {
+          attachMouseListeners();
+        }, 1500); // Duration of burst animation
+      }, 100); // Small delay to ensure copies are rendered
     }
 
     // Check if we should skip intro based on cache
