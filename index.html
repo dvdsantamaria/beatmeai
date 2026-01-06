@@ -122,6 +122,39 @@
       }
     }
 
+    /* Hero Logo Animation */
+    .logo-hero {
+      opacity: 0;
+      animation: logo-entrance 1s ease-out 1s forwards, logo-glow 1s ease-out 1s;
+      filter: brightness(0) invert(1) drop-shadow(0 0 0px rgba(255, 255, 255, 0));
+    }
+
+    @keyframes logo-entrance {
+      0% {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes logo-glow {
+      0% {
+        filter: brightness(0) invert(1) drop-shadow(0 0 0px rgba(255, 255, 255, 0));
+      }
+
+      50% {
+        filter: brightness(0) invert(1) drop-shadow(0 0 60px rgba(255, 255, 255, 0.8)) drop-shadow(0 0 120px rgba(255, 255, 255, 0.6));
+      }
+
+      100% {
+        filter: brightness(0) invert(1) drop-shadow(0 4px 12px rgba(255, 255, 255, 0.3));
+      }
+    }
+
     /* Scroll Indicator */
     @keyframes scroll-dot {
       0% {
@@ -300,11 +333,9 @@
 
       <!-- Content -->
       <div class="relative z-10 text-center">
-        <!-- Main AI Text -->
-        <!-- <h1 id="hero-ai-text"
-          class="ai-text text-[4.5rem] md:text-[8rem] lg:text-[12rem] font-black tracking-tighter leading-none font-display">
-          AI
-        </h1> -->
+        <!-- Logo -->
+        <img id="hero-logo" src="logo.svg" alt="Logo" class="logo-hero mx-auto w-[300px] md:w-[500px] lg:w-[700px]"
+          style="filter: brightness(0) invert(1);">
       </div>
 
       <!-- Scroll Indicator -->
